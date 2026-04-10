@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrigoAid — A Crowdfunding Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#006A4E;--green-light:#008060;--green-pale:#E8F5F0;--green-deep:#004535;
+  --red:#C8102E;--red-light:#E8192E;--red-pale:#FDEAED;
+  --gold:#D4A017;--gold-pale:#FBF4E3;
+  --text:#1A1A1A;--text-muted:#6B6B6B;--text-light:#9B9B9B;
+  --surface:#FFFFFF;--surface-2:#F8FAF9;--surface-3:#F0F5F3;
+  --border:#E2EDE9;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--surface-2);color:var(--text);font-size:15px;line-height:1.6}
+
+/* NAV */
+nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 2rem}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
+.nav-logo{display:flex;align-items:center;gap:12px;cursor:pointer}
+.nav-logo img{height:44px;object-fit:contain}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--text-muted);font-size:14px;font-weight:500;transition:color .2s;cursor:pointer}
+.nav-links a:hover,.nav-links a.active{color:var(--green)}
+.nav-actions{display:flex;gap:12px;align-items:center}
+.btn{border:none;cursor:pointer;font-family:inherit;font-weight:500;transition:all .2s;border-radius:var(--radius-sm)}
+.btn-ghost{background:transparent;color:var(--green);padding:8px 18px;font-size:14px;border:1.5px solid var(--green)}
+.btn-ghost:hover{background:var(--green-pale)}
+.btn-primary{background:var(--green);color:#fff;padding:10px 22px;font-size:14px}
+.btn-primary:hover{background:var(--green-deep)}
+.btn-red{background:var(--red);color:#fff;padding:10px 22px;font-size:14px}
+.btn-red:hover{background:#a00d22}
+.btn-lg{padding:14px 32px;font-size:16px;border-radius:var(--radius)}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 68px)}
+.page.active{display:block}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green) 60%,#1a7a5e 100%);padding:80px 2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#fff;padding:6px 16px;border-radius:40px;font-size:13px;font-weight:500;margin-bottom:20px;border:1px solid rgba(255,255,255,.2)}
+.hero-badge span{width:8px;height:8px;border-radius:50%;background:var(--gold);display:block}
+.hero h1{font-family:'Playfair Display',serif;font-size:48px;color:#fff;line-height:1.15;margin-bottom:20px;font-weight:700}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p{color:rgba(255,255,255,.8);font-size:17px;line-height:1.7;margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-white{background:#fff;color:var(--green);padding:14px 28px;font-size:15px;font-weight:600;border-radius:var(--radius);border:none;cursor:pointer;transition:all .2s}
+.btn-white:hover{background:#f0f0f0}
+.btn-outline-white{background:transparent;color:#fff;padding:14px 28px;font-size:15px;font-weight:500;border-radius:var(--radius);border:1.5px solid rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.btn-outline-white:hover{background:rgba(255,255,255,.1)}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stat-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius);padding:20px}
+.stat-card .num{font-family:'Playfair Display',serif;font-size:32px;color:#fff;font-weight:700}
+.stat-card .lbl{font-size:13px;color:rgba(255,255,255,.65);margin-top:4px}
+.stat-card .sub{font-size:12px;color:var(--gold);margin-top:6px}
+
+/* TRUST BAR */
+.trust-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 2rem}
+.trust-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted)}
+.trust-icon{width:20px;height:20px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:11px;font-weight:700;flex-shrink:0}
+
+/* SECTION */
+.section{padding:64px 2rem}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-header{margin-bottom:40px}
+.section-header h2{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--text)}
+.section-header p{color:var(--text-muted);margin-top:8px;font-size:16px}
+.section-header .tag{display:inline-block;background:var(--green-pale);color:var(--green);font-size:12px;font-weight:600;padding:4px 12px;border-radius:40px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+
+/* CATEGORY CHIPS */
+.cat-chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.chip{padding:8px 18px;border-radius:40px;font-size:13px;font-weight:500;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .2s;color:var(--text-muted)}
+.chip:hover,.chip.active{background:var(--green);border-color:var(--green);color:#fff}
+
+/* CAMPAIGN GRID */
+.campaigns-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.campaign-card{background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);transition:all .25s;cursor:pointer}
+.campaign-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,106,78,.12)}
+.campaign-img{height:190px;position:relative;display:flex;align-items:center;justify-content:center;font-size:56px}
+.campaign-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+.campaign-urgent{position:absolute;top:12px;right:12px;background:var(--red);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px}
+.campaign-body{padding:20px}
+.campaign-body h3{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:8px;color:var(--text)}
+.campaign-body p{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.progress-bar{height:6px;background:var(--surface-3);border-radius:40px;overflow:hidden;margin-bottom:10px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-light));border-radius:40px}
+.campaign-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.campaign-meta .raised{color:var(--green);font-weight:600;font-size:14px}
+.campaign-meta .goal{color:var(--text-light)}
+.campaign-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.campaign-footer .donors{font-size:12px;color:var(--text-muted)}
+.campaign-footer .days{font-size:12px;font-weight:600;color:var(--red)}
+
+/* FEATURED CAMPAIGN */
+.featured-campaign{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;display:grid;grid-template-columns:1fr 1.2fr;margin-bottom:40px}
+.fc-img{background:linear-gradient(135deg,#1a5c3a 0%,#2d8659 100%);display:flex;align-items:center;justify-content:center;font-size:80px;padding:40px}
+.fc-body{padding:40px}
+.fc-tag{display:inline-block;background:var(--red-pale);color:var(--red);font-size:12px;font-weight:600;padding:4px 12px;border-radius:40px;margin-bottom:16px}
+.fc-body h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:12px;line-height:1.3}
+.fc-body p{color:var(--text-muted);margin-bottom:24px;line-height:1.7}
+.fc-progress{margin-bottom:20px}
+.fc-progress .bar{height:8px;background:var(--surface-3);border-radius:40px;overflow:hidden;margin-bottom:10px}
+.fc-progress .fill{height:100%;background:linear-gradient(90deg,var(--red),#e8435a);border-radius:40px}
+.fc-nums{display:flex;gap:32px}
+.fc-nums .n{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text)}
+.fc-nums .l{font-size:12px;color:var(--text-muted)}
+
+/* HOW IT WORKS */
+.hiw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.hiw-card{text-align:center;padding:32px 20px}
+.hiw-icon{width:64px;height:64px;border-radius:var(--radius);background:var(--green-pale);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.hiw-num{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--border);margin-bottom:4px}
+.hiw-card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.hiw-card p{font-size:13px;color:var(--text-muted);line-height:1.6}
+
+/* CAMPAIGN DETAIL */
+.detail-layout{max-width:1200px;margin:0 auto;padding:40px 2rem;display:grid;grid-template-columns:1fr 400px;gap:40px;align-items:start}
+.detail-img{height:380px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#1a5c3a,#2d8659);display:flex;align-items:center;justify-content:center;font-size:100px;margin-bottom:24px}
+.breadcrumb{font-size:13px;color:var(--text-muted);margin-bottom:16px;cursor:pointer}
+.breadcrumb span{color:var(--green)}
+.detail-tag{display:inline-block;background:var(--red-pale);color:var(--red);font-size:12px;font-weight:600;padding:4px 12px;border-radius:40px;margin-bottom:12px}
+.detail-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;line-height:1.25;margin-bottom:16px}
+.detail-meta{display:flex;gap:20px;align-items:center;margin-bottom:24px;flex-wrap:wrap}
+.detail-meta span{font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.detail-meta strong{color:var(--text)}
+.detail-body p{color:var(--text-muted);line-height:1.8;margin-bottom:16px;font-size:15px}
+.detail-body h4{font-family:'Playfair Display',serif;font-size:20px;margin:24px 0 10px}
+.updates-list{margin-top:16px}
+.update-item{border-left:3px solid var(--green);padding:12px 20px;margin-bottom:16px;background:var(--surface-3);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.update-item .date{font-size:12px;color:var(--text-light);margin-bottom:4px}
+.update-item p{font-size:14px;color:var(--text)}
+
+/* DONATION CARD */
+.donation-card{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);padding:32px;position:sticky;top:88px}
+.don-progress .bar{height:10px;background:var(--surface-3);border-radius:40px;overflow:hidden;margin:16px 0 12px}
+.don-progress .fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-light));border-radius:40px}
+.don-big-num{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--green)}
+.don-big-sub{font-size:14px;color:var(--text-muted);margin-bottom:4px}
+.don-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.don-stat{background:var(--surface-3);border-radius:var(--radius-sm);padding:14px}
+.don-stat .v{font-size:18px;font-weight:700;color:var(--text)}
+.don-stat .l{font-size:12px;color:var(--text-muted);margin-top:2px}
+.amount-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.amount-btn{border:1.5px solid var(--border);background:var(--surface);border-radius:var(--radius-sm);padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;font-family:inherit;font-size:14px;font-weight:500;color:var(--text)}
+.amount-btn:hover,.amount-btn.active{border-color:var(--green);background:var(--green-pale);color:var(--green)}
+.input-group{margin-bottom:14px}
+.input-group label{font-size:13px;font-weight:500;color:var(--text);display:block;margin-bottom:6px}
+.input-group input,.input-group select{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s}
+.input-group input:focus,.input-group select:focus{border-color:var(--green)}
+.payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.pay-opt{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;cursor:pointer;text-align:center;transition:all .2s}
+.pay-opt:hover,.pay-opt.active{border-color:var(--green);background:var(--green-pale)}
+.pay-opt .name{font-size:12px;font-weight:600;color:var(--text)}
+.pay-opt .logo{font-size:18px;margin-bottom:2px}
+.don-note{font-size:12px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.6}
+
+/* CREATE CAMPAIGN */
+.create-layout{max-width:800px;margin:0 auto;padding:40px 2rem}
+.create-steps{display:flex;gap:0;margin-bottom:48px;position:relative}
+.create-steps::before{content:'';position:absolute;top:20px;left:20px;right:20px;height:2px;background:var(--border);z-index:0}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;position:relative;z-index:1}
+.step-circle{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;transition:all .3s;font-family:'DM Sans',sans-serif}
+.step-circle.done{background:var(--green);color:#fff}
+.step-circle.current{background:var(--green-deep);color:#fff;box-shadow:0 0 0 4px var(--green-pale)}
+.step-circle.pending{background:var(--surface);color:var(--text-muted);border:2px solid var(--border)}
+.step-label{font-size:12px;font-weight:500;color:var(--text-muted);white-space:nowrap}
+.create-form{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);padding:40px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.form-group{margin-bottom:20px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--green)}
+.form-group textarea{resize:vertical;min-height:120px;line-height:1.6}
+.form-hint{font-size:12px;color:var(--text-light);margin-top:4px}
+.upload-area{border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;cursor:pointer;transition:all .2s}
+.upload-area:hover{border-color:var(--green);background:var(--green-pale)}
+.upload-area .icon{font-size:36px;margin-bottom:8px}
+.upload-area p{font-size:14px;color:var(--text-muted)}
+.upload-area small{font-size:12px;color:var(--text-light)}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cat-select{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;text-align:center;transition:all .2s;background:var(--surface)}
+.cat-select:hover,.cat-select.active{border-color:var(--green);background:var(--green-pale)}
+.cat-select .ico{font-size:24px;margin-bottom:4px}
+.cat-select .name{font-size:12px;font-weight:500;color:var(--text)}
+.form-nav{display:flex;justify-content:space-between;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
+
+/* ABOUT */
+.about-hero{background:linear-gradient(135deg,var(--green-deep),var(--green));padding:80px 2rem;text-align:center}
+.about-hero h1{font-family:'Playfair Display',serif;font-size:48px;color:#fff;font-weight:700;margin-bottom:16px}
+.about-hero p{color:rgba(255,255,255,.8);font-size:18px;max-width:600px;margin:0 auto}
+.about-inner{max-width:1000px;margin:0 auto;padding:64px 2rem}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:64px}
+.about-text h2{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:16px}
+.about-text p{color:var(--text-muted);line-height:1.8;margin-bottom:14px}
+.about-img-box{background:var(--green-pale);border-radius:var(--radius-lg);padding:48px;text-align:center;font-size:80px}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:64px}
+.value-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.value-icon{font-size:32px;margin-bottom:12px}
+.value-card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.value-card p{font-size:13px;color:var(--text-muted);line-height:1.6}
+.team-section h2{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;text-align:center;margin-bottom:32px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.team-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center}
+.team-avatar{width:80px;height:80px;border-radius:50%;background:var(--green-pale);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid var(--green-pale)}
+.team-card h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.team-card .role{font-size:13px;color:var(--green);font-weight:500;margin-bottom:8px}
+.team-card p{font-size:12px;color:var(--text-muted);line-height:1.5}
+
+/* FOOTER */
+footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2rem 24px}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,.6);margin-top:12px;line-height:1.7}
+.footer-col h4{color:#fff;font-size:14px;font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:.8px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.55);margin-bottom:8px;cursor:pointer;transition:color .2s;text-decoration:none}
+.footer-col a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.4);flex-wrap:wrap;gap:8px}
+.footer-logo-img{height:40px;object-fit:contain}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius-lg);padding:48px;max-width:440px;width:90%;text-align:center}
+.modal .check{width:72px;height:72px;background:var(--green-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}
+.modal h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:12px}
+.modal p{color:var(--text-muted);margin-bottom:24px;line-height:1.7}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--green-deep);color:#fff;padding:14px 24px;border-radius:var(--radius);font-size:14px;font-weight:500;z-index:1000;transform:translateY(100px);opacity:0;transition:all .3s;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ALERT */
+.alert{padding:14px 18px;border-radius:var(--radius-sm);margin-bottom:20px;font-size:14px;display:flex;align-items:center;gap:10px}
+.alert-info{background:var(--green-pale);color:var(--green-deep);border:1px solid #b3d9cc}
+
+@media(max-width:900px){
+  .hero-inner,.detail-layout,.featured-campaign,.about-grid,.footer-grid{grid-template-columns:1fr}
+  .campaigns-grid,.hiw-grid,.values-grid,.team-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:34px}
+  .nav-links{gap:1rem}
+}
+@media(max-width:600px){
+  .campaigns-grid,.hiw-grid,.values-grid,.team-grid,.form-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hero h1{font-size:28px}
+  .hero{padding:48px 1.5rem}
+  .section{padding:40px 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')">
+      <img src="origo.jpg" alt="OrigoAid Logo">
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+      <li><a onclick="showPage('campaigns')" id="nav-campaigns">Campaigns</a></li>
+      <li><a onclick="showPage('about')" id="nav-about">About Us</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="showPage('campaigns')">Donate</button>
+      <button class="btn btn-primary" onclick="showPage('create')">Start Campaign</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HOME PAGE ═══════════ -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge"><span></span> Bangladesh's Trusted Crowdfunding Platform</div>
+        <h1>Empower Lives,<br><em>Fund Hope</em> Across<br>Bangladesh</h1>
+        <p>OrigoAid connects generous hearts with those who need it most. Raise funds for medical emergencies, education, and community causes — safely and transparently.</p>
+        <div class="hero-btns">
+          <button class="btn-white" onclick="showPage('campaigns')">Browse Campaigns</button>
+          <button class="btn-outline-white" onclick="showPage('create')">Start a Campaign</button>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="num">৳4.2Cr+</div>
+          <div class="lbl">Total Funds Raised</div>
+          <div class="sub">&#8593; 28% this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">1,840+</div>
+          <div class="lbl">Active Campaigns</div>
+          <div class="sub">Across 64 districts</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">52,000+</div>
+          <div class="lbl">Total Donors</div>
+          <div class="sub">From BD &amp; diaspora</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">98%</div>
+          <div class="lbl">Funds Delivered</div>
+          <div class="sub">Verified disbursements</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-inner">
+      <div class="trust-item"><div class="trust-icon">&#10003;</div> 100% Transparent</div>
+      <div class="trust-item"><div class="trust-icon">&#128274;</div> Secure Payments</div>
+      <div class="trust-item"><div class="trust-icon">&#9889;</div> Fast Disbursement</div>
+      <div class="trust-item"><div class="trust-icon">&#10003;</div> Verified Campaigns</div>
+      <div class="trust-item"><div class="trust-icon">&#128222;</div> 24/7 Support</div>
+    </div>
+  </div>
+
+  <!-- Featured Campaign -->
+  <div class="section" style="background:var(--surface)">
+    <div class="section-inner">
+      <div class="featured-campaign">
+        <div class="fc-img">&#127973;</div>
+        <div class="fc-body">
+          <div class="fc-tag">&#9889; URGENT &mdash; Medical Emergency</div>
+          <h2>Help Rahima Survive Kidney Failure &mdash; Dhaka Medical Needs Your Support</h2>
+          <p>Rahima Begum, 34, mother of three from Sylhet, has been diagnosed with acute kidney failure and needs immediate dialysis. Her family cannot afford the &#2547;8,50,000 required for treatment.</p>
+          <div class="fc-progress">
+            <div class="bar"><div class="fill" style="width:73%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted)"><span>73% raised</span><span>27 days left</span></div>
+          </div>
+          <div class="fc-nums">
+            <div><div class="n">&#2547;6,20,500</div><div class="l">raised</div></div>
+            <div><div class="n">&#2547;8,50,000</div><div class="l">goal</div></div>
+            <div><div class="n">1,248</div><div class="l">donors</div></div>
+          </div>
+          <div style="margin-top:24px"><button class="btn btn-red btn-lg" onclick="showDetail()">Donate Now</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Campaigns -->
+  <div class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="tag">Active Campaigns</div>
+        <h2>Make a Difference Today</h2>
+        <p>Every donation, big or small, creates real impact in someone's life</p>
+      </div>
+      <div class="cat-chips">
+        <div class="chip active">All Causes</div>
+        <div class="chip">Medical</div>
+        <div class="chip">Education</div>
+        <div class="chip">Disaster Relief</div>
+        <div class="chip">Community</div>
+        <div class="chip">Startups</div>
+      </div>
+      <div class="campaigns-grid" id="campaigns-container"></div>
+      <div style="text-align:center;margin-top:40px">
+        <button class="btn btn-ghost btn-lg" onclick="showPage('campaigns')">View All Campaigns &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="section" style="background:var(--surface)">
+    <div class="section-inner">
+      <div class="section-header" style="text-align:center">
+        <div class="tag">How It Works</div>
+        <h2>Simple, Safe, and Transparent</h2>
+      </div>
+      <div class="hiw-grid">
+        <div class="hiw-card">
+          <div class="hiw-num">01</div>
+          <div class="hiw-icon">&#128221;</div>
+          <h3>Create a Campaign</h3>
+          <p>Tell your story, set a funding goal, and publish your campaign in minutes</p>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num">02</div>
+          <div class="hiw-icon">&#128226;</div>
+          <h3>Share &amp; Spread</h3>
+          <p>Share across social media and reach donors across Bangladesh and the diaspora</p>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num">03</div>
+          <div class="hiw-icon">&#128154;</div>
+          <h3>Receive Donations</h3>
+          <p>Donors give securely via bKash, Nagad, cards, or bank transfer in BDT</p>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num">04</div>
+          <div class="hiw-icon">&#9989;</div>
+          <h3>Funds Disbursed</h3>
+          <p>Verified funds are transferred directly after our transparency review</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ CAMPAIGNS PAGE ═══════════ -->
+<div class="page" id="page-campaigns">
+  <div style="background:var(--green-deep);padding:48px 2rem;text-align:center">
+    <h1 style="font-family:'Playfair Display',serif;font-size:40px;color:#fff;font-weight:700;margin-bottom:10px">All Active Campaigns</h1>
+    <p style="color:rgba(255,255,255,.7);font-size:16px">Browse and support causes that matter across Bangladesh</p>
+  </div>
+  <div class="section">
+    <div class="section-inner">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+        <div class="cat-chips" style="margin:0">
+          <div class="chip active">All</div>
+          <div class="chip">Medical</div>
+          <div class="chip">Education</div>
+          <div class="chip">Disaster</div>
+          <div class="chip">Community</div>
+        </div>
+        <select style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 16px;font-size:14px;font-family:inherit;color:var(--text);background:var(--surface)">
+          <option>Most Recent</option>
+          <option>Most Funded</option>
+          <option>Ending Soon</option>
+        </select>
+      </div>
+      <div class="campaigns-grid" id="all-campaigns-container"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CAMPAIGN DETAIL PAGE ═══════════ -->
+<div class="page" id="page-detail">
+  <div class="detail-layout">
+    <div>
+      <div class="breadcrumb" onclick="showPage('campaigns')">&#8592; Back to <span>Campaigns</span></div>
+      <div class="detail-img">&#127973;</div>
+      <div class="detail-tag">&#9889; URGENT &mdash; Medical Emergency</div>
+      <h1 class="detail-title">Help Rahima Survive Kidney Failure &mdash; Dhaka Medical Needs Your Support</h1>
+      <div class="detail-meta">
+        <span>&#128205; <strong>Sylhet, Bangladesh</strong></span>
+        <span>Organizer: <strong>Karim Hossain</strong></span>
+        <span>Created <strong>12 days ago</strong></span>
+      </div>
+      <div class="alert alert-info">
+        <span>&#10003;</span> This campaign has been verified by OrigoAid's team. Documents reviewed and confirmed.
+      </div>
+      <div class="detail-body">
+        <p>Rahima Begum, 34, a mother of three from Sylhet district, has been diagnosed with acute kidney failure following complications from an untreated UTI. She requires immediate dialysis 3 times per week and may need a kidney transplant within 6 months.</p>
+        <p>Her husband works as a day laborer earning &#2547;10,000 per month — not nearly enough to cover the medical costs. The family has already sold their household belongings and borrowed from neighbors. Without your support, Rahima cannot continue treatment.</p>
+        <h4>Where Your Donation Goes</h4>
+        <p>&#2547;4,50,000 — Dialysis for 6 months<br>&#2547;2,00,000 — Medications &amp; consumables<br>&#2547;1,50,000 — Transplant evaluation tests<br>&#2547;50,000 — Family living support during treatment</p>
+        <h4>Campaign Updates</h4>
+        <div class="updates-list">
+          <div class="update-item"><div class="date">April 8, 2026</div><p>Rahima completed her 3rd dialysis session today. Doctors say she's responding well. Thank you to all 1,248 donors!</p></div>
+          <div class="update-item"><div class="date">April 2, 2026</div><p>Medical documents verified by OrigoAid. Funds will be disbursed directly to DMCH hospital account.</p></div>
+          <div class="update-item"><div class="date">March 28, 2026</div><p>Campaign launched. Rahima's first dialysis has been scheduled for April 3rd pending funds.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DONATION CARD -->
+    <div class="donation-card">
+      <div class="don-progress">
+        <div class="don-big-num">&#2547;6,20,500</div>
+        <div class="don-big-sub" style="color:var(--text-muted)">raised of &#2547;8,50,000 goal</div>
+        <div class="bar"><div class="fill" style="width:73%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted)"><span>73% funded</span><span>27 days left</span></div>
+      </div>
+      <div class="don-stats">
+        <div class="don-stat"><div class="v">1,248</div><div class="l">Donors</div></div>
+        <div class="don-stat"><div class="v">27</div><div class="l">Days left</div></div>
+      </div>
+      <div class="input-group"><label>Choose Amount (BDT)</label></div>
+      <div class="amount-grid">
+        <button class="amount-btn" onclick="selectAmount(this,'500')">&#2547;500</button>
+        <button class="amount-btn active" onclick="selectAmount(this,'1000')">&#2547;1,000</button>
+        <button class="amount-btn" onclick="selectAmount(this,'2000')">&#2547;2,000</button>
+        <button class="amount-btn" onclick="selectAmount(this,'5000')">&#2547;5,000</button>
+        <button class="amount-btn" onclick="selectAmount(this,'10000')">&#2547;10,000</button>
+        <button class="amount-btn" onclick="selectAmount(this,'custom')">Custom</button>
+      </div>
+      <div class="input-group" id="custom-amount-group" style="display:none">
+        <input type="number" id="custom-amount" placeholder="Enter amount in BDT">
+      </div>
+      <div class="input-group"><label>Your Name</label><input type="text" placeholder="Full name (optional for anonymous)"></div>
+      <div class="input-group"><label>Email (for receipt)</label><input type="email" placeholder="you@example.com"></div>
+      <div class="input-group"><label>Payment Method</label></div>
+      <div class="payment-methods">
+        <div class="pay-opt active" onclick="selectPay(this)"><div class="logo">&#128241;</div><div class="name">bKash</div></div>
+        <div class="pay-opt" onclick="selectPay(this)"><div class="logo">&#128156;</div><div class="name">Nagad</div></div>
+        <div class="pay-opt" onclick="selectPay(this)"><div class="logo">&#128179;</div><div class="name">Card</div></div>
+        <div class="pay-opt" onclick="selectPay(this)"><div class="logo">&#127981;</div><div class="name">Bank</div></div>
+      </div>
+      <button class="btn btn-red btn-lg" style="width:100%" onclick="processDonation()">Donate Now</button>
+      <p class="don-note">&#128274; Secured by SSL encryption. Your payment info is never stored on our servers. Receipts sent via email.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CREATE CAMPAIGN PAGE ═══════════ -->
+<div class="page" id="page-create">
+  <div style="background:var(--green-deep);padding:48px 2rem;text-align:center">
+    <h1 style="font-family:'Playfair Display',serif;font-size:40px;color:#fff;font-weight:700;margin-bottom:10px">Start Your Campaign</h1>
+    <p style="color:rgba(255,255,255,.7)">Tell your story and get funded by thousands of supporters across Bangladesh</p>
+  </div>
+  <div class="create-layout">
+    <div class="create-steps">
+      <div class="step-item"><div class="step-circle current" id="sc1">1</div><div class="step-label">Basics</div></div>
+      <div class="step-item"><div class="step-circle pending" id="sc2">2</div><div class="step-label">Story</div></div>
+      <div class="step-item"><div class="step-circle pending" id="sc3">3</div><div class="step-label">Goal &amp; Media</div></div>
+      <div class="step-item"><div class="step-circle pending" id="sc4">4</div><div class="step-label">Review</div></div>
+    </div>
+
+    <div class="create-form" id="create-step-1">
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px">Campaign Basics</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px">Tell us the fundamentals about your campaign</p>
+      <div class="form-group">
+        <label>Campaign Title *</label>
+        <input type="text" placeholder="e.g. Help Ahmed Recover from Surgery">
+        <div class="form-hint">Keep it clear and compelling (max 80 characters)</div>
+      </div>
+      <div class="form-group">
+        <label>Category *</label>
+        <div class="cat-grid">
+          <div class="cat-select active"><div class="ico">&#127973;</div><div class="name">Medical</div></div>
+          <div class="cat-select"><div class="ico">&#128218;</div><div class="name">Education</div></div>
+          <div class="cat-select"><div class="ico">&#127754;</div><div class="name">Disaster</div></div>
+          <div class="cat-select"><div class="ico">&#127968;</div><div class="name">Community</div></div>
+          <div class="cat-select"><div class="ico">&#127807;</div><div class="name">Startup</div></div>
+          <div class="cat-select"><div class="ico">&#127912;</div><div class="name">Creative</div></div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Your District *</label>
+          <select>
+            <option>Select district</option>
+            <option>Dhaka</option><option>Sylhet</option><option>Chittagong</option>
+            <option>Rajshahi</option><option>Khulna</option><option>Barisal</option>
+            <option>Rangpur</option><option>Mymensingh</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Beneficiary Name *</label>
+          <input type="text" placeholder="Who will receive the funds?">
+        </div>
+      </div>
+      <div class="form-nav">
+        <div></div>
+        <button class="btn btn-primary btn-lg" onclick="goStep(2)">Next: Tell Your Story &rarr;</button>
+      </div>
+    </div>
+
+    <div class="create-form" id="create-step-2" style="display:none">
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px">Your Story</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px">Help donors connect with your cause</p>
+      <div class="form-group">
+        <label>Campaign Description *</label>
+        <textarea placeholder="Describe the situation in detail. Who needs help? What happened? Why is this urgent? How will funds be used?"></textarea>
+        <div class="form-hint">Campaigns with detailed stories raise 3x more funds on average</div>
+      </div>
+      <div class="form-group">
+        <label>Fund Utilization Breakdown *</label>
+        <textarea style="min-height:90px" placeholder="e.g. &#2547;2,00,000 — Surgery cost&#10;&#2547;50,000 — Post-op medication"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Organizer's Relationship to Beneficiary</label>
+        <select>
+          <option>I am the beneficiary</option>
+          <option>Family member</option>
+          <option>Friend</option>
+          <option>Community leader / Organization</option>
+        </select>
+      </div>
+      <div class="form-nav">
+        <button class="btn btn-ghost" onclick="goStep(1)">&larr; Back</button>
+        <button class="btn btn-primary btn-lg" onclick="goStep(3)">Next: Goal &amp; Media &rarr;</button>
+      </div>
+    </div>
+
+    <div class="create-form" id="create-step-3" style="display:none">
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px">Funding Goal &amp; Media</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px">Set your target and upload supporting materials</p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Fundraising Goal (BDT) *</label>
+          <input type="number" placeholder="e.g. 500000">
+          <div class="form-hint">Recommended: Be specific, not round numbers</div>
+        </div>
+        <div class="form-group">
+          <label>Campaign Duration *</label>
+          <select>
+            <option>30 days</option><option>45 days</option><option>60 days</option><option>90 days</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Campaign Cover Image *</label>
+        <div class="upload-area">
+          <div class="icon">&#128247;</div>
+          <p>Click or drag to upload image</p>
+          <small>JPG, PNG up to 5MB &mdash; high quality photos improve donations</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Supporting Documents</label>
+        <div class="upload-area" style="padding:24px">
+          <div class="icon" style="font-size:24px">&#128206;</div>
+          <p style="font-size:13px">Medical reports, certificates, or other proof</p>
+          <small>PDF, JPG up to 10MB each</small>
+        </div>
+        <div class="form-hint">Documents speed up the verification process (usually 24&ndash;48 hrs)</div>
+      </div>
+      <div class="form-nav">
+        <button class="btn btn-ghost" onclick="goStep(2)">&larr; Back</button>
+        <button class="btn btn-primary btn-lg" onclick="goStep(4)">Review Campaign &rarr;</button>
+      </div>
+    </div>
+
+    <div class="create-form" id="create-step-4" style="display:none">
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px">Review &amp; Launch</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px">Almost there &mdash; review and submit your campaign</p>
+      <div style="background:var(--green-pale);border-radius:var(--radius);padding:24px;margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="font-size:32px">&#127973;</div>
+          <div>
+            <div style="font-weight:600;font-size:15px">Your Campaign</div>
+            <div style="font-size:13px;color:var(--text-muted)">Medical Emergency &middot; Dhaka</div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:var(--text-muted)">Once submitted, OrigoAid's team will review your documents within 24&ndash;48 hours before publishing.</div>
+      </div>
+      <div class="form-group">
+        <label>Organizer's Mobile (for verification)</label>
+        <input type="tel" placeholder="+880 1XXX-XXXXXX">
+      </div>
+      <div style="background:var(--gold-pale);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;font-size:13px;color:#7a5c00;line-height:1.7">
+        &#10004; By submitting, you agree to OrigoAid's Terms of Service and confirm that all information is accurate. False campaigns are subject to removal and legal action.
+      </div>
+      <div class="form-nav">
+        <button class="btn btn-ghost" onclick="goStep(3)">&larr; Back</button>
+        <button class="btn btn-primary btn-lg" onclick="submitCampaign()">Submit Campaign &#128640;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ABOUT PAGE ═══════════ -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <h1>About OrigoAid</h1>
+    <p>Born in Bangladesh, built for Bangladesh &mdash; empowering communities through the power of collective giving</p>
+  </div>
+  <div class="about-inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <div style="display:inline-block;background:var(--green-pale);color:var(--green);font-size:12px;font-weight:600;padding:4px 12px;border-radius:40px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">Our Mission</div>
+        <h2>Bridging the Gap Between Generosity and Need</h2>
+        <p>OrigoAid was founded with one simple belief: no Bangladeshi should be denied medical care, education, or recovery from disaster simply because of financial barriers.</p>
+        <p>We provide a trusted, transparent platform where fundraisers can tell their stories and donors can give with confidence &mdash; knowing every taka reaches its intended purpose.</p>
+        <p>From flood victims in Sylhet to students in Rangpur seeking scholarships, OrigoAid is the connective tissue between Bangladesh's generous hearts.</p>
+      </div>
+      <div class="about-img-box">&#127468;&#127465;<div style="font-size:16px;margin-top:16px;color:var(--green-deep);font-weight:600">Made in Bangladesh<br>for Bangladesh</div></div>
+    </div>
+
+    <div style="margin-bottom:64px">
+      <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;text-align:center;margin-bottom:32px">Our Values</h2>
+      <div class="values-grid">
+        <div class="value-card"><div class="value-icon">&#128269;</div><h3>Radical Transparency</h3><p>Every campaign is verified. Fund flows are tracked and reported. Donors always know where their money goes.</p></div>
+        <div class="value-card"><div class="value-icon">&#129309;</div><h3>Community First</h3><p>We prioritize grassroots causes &mdash; the individual stories that national aid often misses.</p></div>
+        <div class="value-card"><div class="value-icon">&#9889;</div><h3>Speed &amp; Urgency</h3><p>We know emergencies can't wait. Our 24-hour verification helps funds reach those in crisis fast.</p></div>
+        <div class="value-card"><div class="value-icon">&#128274;</div><h3>Safe &amp; Secure</h3><p>Bank-grade encryption, bKash/Nagad integration, and strict anti-fraud protocols protect every transaction.</p></div>
+        <div class="value-card"><div class="value-icon">&#127807;</div><h3>Sustainable Impact</h3><p>We don't just raise funds &mdash; we document outcomes and share impact reports with the donor community.</p></div>
+        <div class="value-card"><div class="value-icon">&#128154;</div><h3>Inclusive Access</h3><p>Anyone in Bangladesh can create a campaign. We offer support in both Bangla and English.</p></div>
+      </div>
+    </div>
+
+    <div class="team-section">
+      <h2>Meet the Team</h2>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">&#128100;</div>
+          <h3>XYZ</h3>
+          <div class="role">Co-Founder &amp; CEO</div>
+          <p>Former NGO director with 12 years in humanitarian work across rural Bangladesh</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">&#128100;</div>
+          <h3>XYZ</h3>
+          <div class="role">Co-Founder &amp; CTO</div>
+          <p>Tech entrepreneur, previously built fintech solutions for mobile banking in Bangladesh</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">&#128100;</div>
+          <h3>XYZ</h3>
+          <div class="role">Head of Verification</div>
+          <p>Chartered accountant ensuring 100% fund accountability and campaign integrity</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--green);border-radius:var(--radius-lg);padding:48px;text-align:center;margin-top:64px">
+      <h2 style="font-family:'Playfair Display',serif;font-size:32px;color:#fff;font-weight:700;margin-bottom:12px">Ready to Make an Impact?</h2>
+      <p style="color:rgba(255,255,255,.8);margin-bottom:28px;font-size:16px">Join 52,000+ donors who have already changed lives across Bangladesh</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-white" onclick="showPage('create')">Start a Campaign</button>
+        <button class="btn-outline-white" onclick="showPage('campaigns')">Browse Campaigns</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="origo.jpg" alt="OrigoAid" class="footer-logo-img">
+        <p>Bangladesh's trusted crowdfunding platform &mdash; connecting generous hearts with those who need help most, since 2024.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a onclick="showPage('campaigns')">Browse Campaigns</a>
+        <a onclick="showPage('create')">Start a Campaign</a>
+        <a href="#">How It Works</a>
+        <a href="#">Success Stories</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a onclick="showPage('about')">About Us</a>
+        <a href="#">Our Team</a>
+        <a href="#">Press</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Trust &amp; Safety</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 OrigoAid. All rights reserved. Registered in Bangladesh.</span>
+      <span>&#127468;&#127465; Made with love for Bangladesh</span>
+    </div>
+  </div>
+</footer>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="donationModal">
+  <div class="modal">
+    <div class="check">&#9989;</div>
+    <h2>Thank You for Your Generosity!</h2>
+    <p>Your donation has been received and a receipt has been sent to your email. Rahima and her family are grateful for your support.</p>
+    <div style="background:var(--green-pale);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;text-align:left">
+      <div style="font-size:13px;color:var(--text-muted)">Transaction ID</div>
+      <div style="font-size:15px;font-weight:600;color:var(--green)">OA-2026-8823749</div>
+    </div>
+    <button class="btn btn-primary btn-lg" style="width:100%" onclick="closeModal()">Continue Browsing Campaigns</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+var campaigns=[
+  {emoji:'&#127981;',cat:'Education',title:'Build a Classroom in Sunamganj Flood Zone',desc:'40 children have no school since the 2024 floods destroyed their only classroom. Help us rebuild.',raised:180000,goal:400000,donors:342,days:18,urgent:false},
+  {emoji:'&#127973;',cat:'Medical',title:'Liver Transplant for 8-year-old Tasneem',desc:'Young Tasneem needs an urgent liver transplant. Her parents, daily wage workers, cannot afford the surgery.',raised:520000,goal:700000,donors:891,days:9,urgent:true},
+  {emoji:'&#127754;',cat:'Disaster',title:'Flood Relief: 200 Families in Sirajganj',desc:'Recent floods have displaced 200 families. They need food, clean water, and temporary shelter urgently.',raised:95000,goal:250000,donors:210,days:5,urgent:true},
+  {emoji:'&#128187;',cat:'Startup',title:'Agri-Tech App for Small Farmers in Rajshahi',desc:'A mobile app to help 10,000 small farmers get real-time crop prices and weather forecasts.',raised:310000,goal:500000,donors:428,days:34,urgent:false},
+  {emoji:'&#128218;',cat:'Education',title:'50 Scholarships for Girls in Barisal',desc:'Help us fund scholarships for 50 bright girls at risk of dropping out due to poverty in coastal Barisal.',raised:440000,goal:600000,donors:677,days:22,urgent:false},
+  {emoji:'&#129464;',cat:'Medical',title:'Prosthetic Limb for RMG Worker Farida',desc:'Farida lost her arm in a factory accident. She needs a prosthetic limb to return to work and support her children.',raised:75000,goal:180000,donors:134,days:41,urgent:false}
+];
+
+function getBg(cat){
+  var m={Medical:'linear-gradient(135deg,#1a5c3a,#2d8659)',Education:'linear-gradient(135deg,#1a3a5c,#2d6086)',Disaster:'linear-gradient(135deg,#5c1a1a,#864040)',Startup:'linear-gradient(135deg,#3a3a1a,#6b6b2d)',Community:'linear-gradient(135deg,#3a1a5c,#6b3a8c)'};
+  return m[cat]||'linear-gradient(135deg,#1a4a3a,#2d7055)';
+}
+
+function fmt(n){
+  if(n>=10000000) return (n/10000000).toFixed(1)+'Cr';
+  if(n>=100000) return (n/100000).toFixed(1)+'L';
+  if(n>=1000) return (n/1000).toFixed(0)+'K';
+  return n.toLocaleString();
+}
+
+function renderCampaigns(containerId, list){
+  var el=document.getElementById(containerId);
+  if(!el) return;
+  var html='';
+  for(var i=0;i<list.length;i++){
+    var c=list[i];
+    var pct=Math.round(c.raised/c.goal*100);
+    html+='<div class="campaign-card" onclick="showDetail()">';
+    html+='<div class="campaign-img" style="background:'+getBg(c.cat)+'">';
+    html+='<span>'+c.emoji+'</span>';
+    html+='<div class="campaign-badge">'+c.cat+'</div>';
+    if(c.urgent) html+='<div class="campaign-urgent">Urgent</div>';
+    html+='</div>';
+    html+='<div class="campaign-body">';
+    html+='<h3>'+c.title+'</h3>';
+    html+='<p>'+c.desc+'</p>';
+    html+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div>';
+    html+='<div class="campaign-meta"><span class="raised">&#2547;'+fmt(c.raised)+'</span><span class="goal">of &#2547;'+fmt(c.goal)+'</span></div>';
+    html+='</div>';
+    html+='<div class="campaign-footer"><span class="donors">'+c.donors+' donors</span><span class="days">'+c.days+' days left</span></div>';
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}
+
+function showPage(p){
+  var pages=document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++) pages[i].classList.remove('active');
+  var navs=document.querySelectorAll('.nav-links a');
+  for(var i=0;i<navs.length;i++) navs[i].classList.remove('active');
+  document.getElementById('page-'+p).classList.add('active');
+  var nav=document.getElementById('nav-'+p);
+  if(nav) nav.classList.add('active');
+  window.scrollTo(0,0);
+  if(p==='campaigns') renderCampaigns('all-campaigns-container',campaigns);
+}
+
+function showDetail(){showPage('detail');}
+
+function selectAmount(btn,val){
+  var btns=document.querySelectorAll('.amount-btn');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+  document.getElementById('custom-amount-group').style.display=(val==='custom')?'block':'none';
+}
+
+function selectPay(el){
+  var opts=document.querySelectorAll('.pay-opt');
+  for(var i=0;i<opts.length;i++) opts[i].classList.remove('active');
+  el.classList.add('active');
+}
+
+function processDonation(){
+  document.getElementById('donationModal').classList.add('show');
+}
+
+function closeModal(){
+  document.getElementById('donationModal').classList.remove('show');
+  showPage('campaigns');
+}
+
+function goStep(n){
+  for(var i=1;i<=4;i++){
+    var step=document.getElementById('create-step-'+i);
+    step.style.display=(i===n)?'block':'none';
+    var sc=document.getElementById('sc'+i);
+    if(i<n){sc.className='step-circle done';sc.textContent='✓';}
+    else if(i===n){sc.className='step-circle current';sc.textContent=i;}
+    else{sc.className='step-circle pending';sc.textContent=i;}
+  }
+  window.scrollTo(0,300);
+}
+
+function submitCampaign(){
+  var t=document.getElementById('toast');
+  t.textContent='Campaign submitted! Our team will review it within 24 hours.';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');showPage('home');},3500);
+  goStep(1);
+}
+
+var chips=document.querySelectorAll('.chip');
+for(var i=0;i<chips.length;i++){
+  chips[i].addEventListener('click',function(){
+    var siblings=this.closest('.cat-chips').querySelectorAll('.chip');
+    for(var j=0;j<siblings.length;j++) siblings[j].classList.remove('active');
+    this.classList.add('active');
+  });
+}
+
+var catSelects=document.querySelectorAll('.cat-select');
+for(var i=0;i<catSelects.length;i++){
+  catSelects[i].addEventListener('click',function(){
+    var siblings=this.closest('.cat-grid').querySelectorAll('.cat-select');
+    for(var j=0;j<siblings.length;j++) siblings[j].classList.remove('active');
+    this.classList.add('active');
+  });
+}
+
+renderCampaigns('campaigns-container',campaigns);
+</script>
+</body>
+</html>
