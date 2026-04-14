@@ -8,12 +8,12 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --green:#006A4E;--green-light:#008060;--green-pale:#E8F5F0;--green-deep:#004535;
+  --green:#1A56C4;--green-light:#2D6FE0;--green-pale:#EBF2FF;--green-deep:#0D3A8C;
   --red:#C8102E;--red-light:#E8192E;--red-pale:#FDEAED;
-  --gold:#D4A017;--gold-pale:#FBF4E3;
+  --gold:#4A90D9;--gold-pale:#EBF2FF;
   --text:#1A1A1A;--text-muted:#6B6B6B;--text-light:#9B9B9B;
-  --surface:#FFFFFF;--surface-2:#F8FAF9;--surface-3:#F0F5F3;
-  --border:#E2EDE9;
+  --surface:#FFFFFF;--surface-2:#F5F8FF;--surface-3:#EBF2FF;
+  --border:#D0DFF7;
   --radius:12px;--radius-lg:20px;--radius-sm:8px;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--surface-2);color:var(--text);font-size:15px;line-height:1.6}
@@ -22,7 +22,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface-2);color:var(--te
 nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 2rem}
 .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
 .nav-logo{display:flex;align-items:center;gap:12px;cursor:pointer}
-.nav-logo img{height:44px;object-fit:contain}
+.nav-logo img{height:54px;width:54px;object-fit:cover;border-radius:50%;border:2px solid var(--border)}
 .nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{text-decoration:none;color:var(--text-muted);font-size:14px;font-weight:500;transition:color .2s;cursor:pointer}
 .nav-links a:hover,.nav-links a.active{color:var(--green)}
@@ -41,13 +41,13 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);position:sti
 .page.active{display:block}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green) 60%,#1a7a5e 100%);padding:80px 2rem;position:relative;overflow:hidden}
+.hero{background:linear-gradient(135deg,var(--green-deep) 0%,var(--green) 60%,#2563C4 100%);padding:80px 2rem;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 .hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#fff;padding:6px 16px;border-radius:40px;font-size:13px;font-weight:500;margin-bottom:20px;border:1px solid rgba(255,255,255,.2)}
-.hero-badge span{width:8px;height:8px;border-radius:50%;background:var(--gold);display:block}
+.hero-badge span{width:8px;height:8px;border-radius:50%;background:#93C5FD;display:block}
 .hero h1{font-family:'Playfair Display',serif;font-size:48px;color:#fff;line-height:1.15;margin-bottom:20px;font-weight:700}
-.hero h1 em{color:var(--gold);font-style:normal}
+.hero h1 em{color:#93C5FD;font-style:normal}
 .hero p{color:rgba(255,255,255,.8);font-size:17px;line-height:1.7;margin-bottom:32px}
 .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
 .btn-white{background:#fff;color:var(--green);padding:14px 28px;font-size:15px;font-weight:600;border-radius:var(--radius);border:none;cursor:pointer;transition:all .2s}
@@ -58,7 +58,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);position:sti
 .stat-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius);padding:20px}
 .stat-card .num{font-family:'Playfair Display',serif;font-size:32px;color:#fff;font-weight:700}
 .stat-card .lbl{font-size:13px;color:rgba(255,255,255,.65);margin-top:4px}
-.stat-card .sub{font-size:12px;color:var(--gold);margin-top:6px}
+.stat-card .sub{font-size:12px;color:#93C5FD;margin-top:6px}
 
 /* TRUST BAR */
 .trust-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 2rem}
@@ -100,7 +100,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);position:sti
 
 /* FEATURED CAMPAIGN */
 .featured-campaign{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;display:grid;grid-template-columns:1fr 1.2fr;margin-bottom:40px}
-.fc-img{background:linear-gradient(135deg,#1a5c3a 0%,#2d8659 100%);display:flex;align-items:center;justify-content:center;font-size:80px;padding:40px}
+.fc-img{background:linear-gradient(135deg,#0D3A8C 0%,#1A56C4 100%);display:flex;align-items:center;justify-content:center;font-size:80px;padding:40px}
 .fc-body{padding:40px}
 .fc-tag{display:inline-block;background:var(--red-pale);color:var(--red);font-size:12px;font-weight:600;padding:4px 12px;border-radius:40px;margin-bottom:16px}
 .fc-body h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:12px;line-height:1.3}
@@ -122,7 +122,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);position:sti
 
 /* CAMPAIGN DETAIL */
 .detail-layout{max-width:1200px;margin:0 auto;padding:40px 2rem;display:grid;grid-template-columns:1fr 400px;gap:40px;align-items:start}
-.detail-img{height:380px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#1a5c3a,#2d8659);display:flex;align-items:center;justify-content:center;font-size:100px;margin-bottom:24px}
+.detail-img{height:380px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#0D3A8C,#1A56C4);display:flex;align-items:center;justify-content:center;font-size:100px;margin-bottom:24px}
 .breadcrumb{font-size:13px;color:var(--text-muted);margin-bottom:16px;cursor:pointer}
 .breadcrumb span{color:var(--green)}
 .detail-tag{display:inline-block;background:var(--red-pale);color:var(--red);font-size:12px;font-weight:600;padding:4px 12px;border-radius:40px;margin-bottom:12px}
@@ -223,7 +223,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2re
 .footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.55);margin-bottom:8px;cursor:pointer;transition:color .2s;text-decoration:none}
 .footer-col a:hover{color:#fff}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.4);flex-wrap:wrap;gap:8px}
-.footer-logo-img{height:40px;object-fit:contain}
+.footer-logo-img{height:54px;width:54px;object-fit:cover;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:none;align-items:center;justify-content:center}
@@ -239,7 +239,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2re
 
 /* ALERT */
 .alert{padding:14px 18px;border-radius:var(--radius-sm);margin-bottom:20px;font-size:14px;display:flex;align-items:center;gap:10px}
-.alert-info{background:var(--green-pale);color:var(--green-deep);border:1px solid #b3d9cc}
+.alert-info{background:var(--green-pale);color:var(--green-deep);border:1px solid #a8c4f0}
 
 @media(max-width:900px){
   .hero-inner,.detail-layout,.featured-campaign,.about-grid,.footer-grid{grid-template-columns:1fr}
@@ -643,7 +643,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2re
         <label>Organizer's Mobile (for verification)</label>
         <input type="tel" placeholder="+880 1XXX-XXXXXX">
       </div>
-      <div style="background:var(--gold-pale);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;font-size:13px;color:#7a5c00;line-height:1.7">
+      <div style="background:var(--green-pale);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;font-size:13px;color:var(--green-deep);line-height:1.7">
         &#10004; By submitting, you agree to OrigoAid's Terms of Service and confirm that all information is accurate. False campaigns are subject to removal and legal action.
       </div>
       <div class="form-nav">
@@ -669,7 +669,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2re
         <p>We provide a trusted, transparent platform where fundraisers can tell their stories and donors can give with confidence &mdash; knowing every taka reaches its intended purpose.</p>
         <p>From flood victims in Sylhet to students in Rangpur seeking scholarships, OrigoAid is the connective tissue between Bangladesh's generous hearts.</p>
       </div>
-      <div class="about-img-box">&#127468;&#127465;<div style="font-size:16px;margin-top:16px;color:var(--green-deep);font-weight:600">Made in Bangladesh<br>for Bangladesh</div></div>
+      <div class="about-img-box"><div style="font-size:48px;margin-bottom:16px">&#127968;</div><div style="font-size:20px;font-weight:700;color:var(--green-deep);margin-bottom:8px">Based in Bangladesh</div><div style="font-size:14px;color:var(--text-muted);line-height:1.7">A homegrown platform built to serve the people of Bangladesh &mdash; from Dhaka to every corner of the country.</div></div>
     </div>
 
     <div style="margin-bottom:64px">
@@ -725,7 +725,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2re
     <div class="footer-grid">
       <div class="footer-brand">
         <img src="origo.jpg" alt="OrigoAid" class="footer-logo-img">
-        <p>Bangladesh's trusted crowdfunding platform &mdash; connecting generous hearts with those who need help most, since 2024.</p>
+        <p>Bangladesh's trusted crowdfunding platform &mdash; connecting generous hearts with those who need help most, since 2026.</p>
       </div>
       <div class="footer-col">
         <h4>Platform</h4>
@@ -751,7 +751,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2re
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 OrigoAid. All rights reserved. Registered in Bangladesh.</span>
-      <span>&#127468;&#127465; Made with love for Bangladesh</span>
+      <span>Based in Bangladesh &mdash; serving communities nationwide</span>
     </div>
   </div>
 </footer>
@@ -775,7 +775,7 @@ footer{background:var(--green-deep);color:rgba(255,255,255,.75);padding:48px 2re
 
 <script>
 var campaigns=[
-  {emoji:'&#127981;',cat:'Education',title:'Build a Classroom in Sunamganj Flood Zone',desc:'40 children have no school since the 2024 floods destroyed their only classroom. Help us rebuild.',raised:180000,goal:400000,donors:342,days:18,urgent:false},
+  {emoji:'&#127981;',cat:'Education',title:'Build a Classroom in Sunamganj Flood Zone',desc:'40 children have no school since the 2026 floods destroyed their only classroom. Help us rebuild.',raised:180000,goal:400000,donors:342,days:18,urgent:false},
   {emoji:'&#127973;',cat:'Medical',title:'Liver Transplant for 8-year-old Tasneem',desc:'Young Tasneem needs an urgent liver transplant. Her parents, daily wage workers, cannot afford the surgery.',raised:520000,goal:700000,donors:891,days:9,urgent:true},
   {emoji:'&#127754;',cat:'Disaster',title:'Flood Relief: 200 Families in Sirajganj',desc:'Recent floods have displaced 200 families. They need food, clean water, and temporary shelter urgently.',raised:95000,goal:250000,donors:210,days:5,urgent:true},
   {emoji:'&#128187;',cat:'Startup',title:'Agri-Tech App for Small Farmers in Rajshahi',desc:'A mobile app to help 10,000 small farmers get real-time crop prices and weather forecasts.',raised:310000,goal:500000,donors:428,days:34,urgent:false},
@@ -784,8 +784,8 @@ var campaigns=[
 ];
 
 function getBg(cat){
-  var m={Medical:'linear-gradient(135deg,#1a5c3a,#2d8659)',Education:'linear-gradient(135deg,#1a3a5c,#2d6086)',Disaster:'linear-gradient(135deg,#5c1a1a,#864040)',Startup:'linear-gradient(135deg,#3a3a1a,#6b6b2d)',Community:'linear-gradient(135deg,#3a1a5c,#6b3a8c)'};
-  return m[cat]||'linear-gradient(135deg,#1a4a3a,#2d7055)';
+  var m={Medical:'linear-gradient(135deg,#0D3A8C,#1A56C4)',Education:'linear-gradient(135deg,#1a3a6c,#2D6FE0)',Disaster:'linear-gradient(135deg,#7a1a1a,#C8102E)',Startup:'linear-gradient(135deg,#0a2a5c,#1A56C4)',Community:'linear-gradient(135deg,#0d2a7c,#2563C4)'};
+  return m[cat]||'linear-gradient(135deg,#0D3A8C,#1A56C4)';
 }
 
 function fmt(n){
